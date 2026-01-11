@@ -5,10 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import Posts from "./Posts";
 import * as queries from "../api/queries";
+import * as commands from "../api/commands";
 import type { User, Post } from "../types";
 
-// Mock the queries module
+// Mock the queries and commands modules
 vi.mock("../api/queries");
+vi.mock("../api/commands");
 
 // Helper function to render component with QueryClient
 const renderWithQueryClient = (ui: React.ReactElement) => {
@@ -61,9 +63,9 @@ describe("Posts", () => {
     // Setup default mock implementations
     (queries.useUserByUsername as any) = mockUseUserByUsername;
     (queries.usePosts as any) = mockUsePosts;
-    (queries.useCreatePost as any) = mockUseCreatePost;
-    (queries.useUpdatePost as any) = mockUseUpdatePost;
-    (queries.useDeletePost as any) = mockUseDeletePost;
+    (commands.useCreatePost as any) = mockUseCreatePost;
+    (commands.useUpdatePost as any) = mockUseUpdatePost;
+    (commands.useDeletePost as any) = mockUseDeletePost;
 
     mockUseUserByUsername.mockReturnValue({
       data: mockUser,

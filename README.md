@@ -134,7 +134,8 @@ The frontend follows a **component-based architecture** with clear separation of
 - **Components**: Reusable UI components (`Navigation`, `Posts`) with encapsulated logic
 - **API Layer**:
   - `client.ts`: Centralized API client with typed fetch wrapper
-  - `queries.ts`: React Query hooks for data fetching with caching and invalidation
+  - `queries.ts`: ReactQuery query hooks for data fetching with caching and invalidation
+  - `mutations.ts`: ReactQuery mutation hooks for data update (commands) in the server
 - **State Management**: TanStack Query handles server state (cache, refetching, optimistic updates)
 - **Routing**: React Router v7 for declarative routing
 - **Styling**: Tailwind CSS utility-first approach for responsive design

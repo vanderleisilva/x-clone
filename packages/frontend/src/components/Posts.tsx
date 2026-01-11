@@ -1,11 +1,6 @@
-import { useState } from 'react';
-import {
-  usePosts,
-  useCreatePost,
-  useUpdatePost,
-  useDeletePost,
-  useUserByUsername,
-} from '../api/queries';
+import { useState } from "react";
+import { usePosts, useUserByUsername } from "../api/queries";
+import { useCreatePost, useUpdatePost, useDeletePost } from "../api/commands";
 
 interface PostsProps {
   username: string;
@@ -14,8 +9,8 @@ interface PostsProps {
 
 export default function Posts({ username, readOnly = false }: PostsProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editContent, setEditContent] = useState('');
-  const [newPostContent, setNewPostContent] = useState('');
+  const [editContent, setEditContent] = useState("");
+  const [newPostContent, setNewPostContent] = useState("");
 
   const { data: user, isLoading: userLoading } = useUserByUsername(username);
   const {
@@ -24,17 +19,17 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
     error: postsError,
   } = usePosts(user?.id);
 
-  const createPost = useCreatePost(user?.id || '');
-  const updatePost = useUpdatePost(user?.id || '');
-  const deletePost = useDeletePost(user?.id || '');
+  const createPost = useCreatePost(user?.id || "");
+  const updatePost = useUpdatePost(user?.id || "");
+  const deletePost = useDeletePost(user?.id || "");
 
   const handleCreatePost = async () => {
     if (!newPostContent.trim() || !user?.id) return;
     try {
       await createPost.mutateAsync({ content: newPostContent.trim() });
-      setNewPostContent('');
+      setNewPostContent("");
     } catch (error) {
-      console.error('Failed to create post:', error);
+      console.error("Failed to create post:", error);
     }
   };
 
@@ -45,7 +40,7 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    setEditContent('');
+    setEditContent("");
   };
 
   const handleUpdatePost = async (id: string) => {
@@ -53,18 +48,18 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
     try {
       await updatePost.mutateAsync({ id, content: editContent.trim() });
       setEditingId(null);
-      setEditContent('');
+      setEditContent("");
     } catch (error) {
-      console.error('Failed to update post:', error);
+      console.error("Failed to update post:", error);
     }
   };
 
   const handleDeletePost = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this post?')) return;
+    if (!confirm("Are you sure you want to delete this post?")) return;
     try {
       await deletePost.mutateAsync(id);
     } catch (error) {
-      console.error('Failed to delete post:', error);
+      console.error("Failed to delete post:", error);
     }
   };
 
@@ -105,7 +100,7 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
               disabled={!newPostContent.trim() || createPost.isPending}
               className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {createPost.isPending ? 'Posting...' : 'Post'}
+              {createPost.isPending ? "Posting..." : "Post"}
             </button>
           </div>
         </div>
@@ -144,7 +139,7 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
                         disabled={!editContent.trim() || updatePost.isPending}
                         className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {updatePost.isPending ? 'Updating...' : 'Save'}
+                        {updatePost.isPending ? "Updating..." : "Save"}
                       </button>
                     </div>
                   </div>
@@ -169,7 +164,7 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
                           disabled={deletePost.isPending}
                           className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          {deletePost.isPending ? 'Deleting...' : 'Delete'}
+                          {deletePost.isPending ? "Deleting..." : "Delete"}
                         </button>
                       </div>
                     )}
@@ -183,4 +178,3 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
     </div>
   );
 }
-
