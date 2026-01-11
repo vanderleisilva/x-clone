@@ -22,7 +22,8 @@ import { Post } from './posts/entities/post.entity';
         password: configService.get('DATABASE_PASSWORD', 'postgres'),
         database: configService.get('DATABASE_NAME', 'x_clone'),
         entities: [User, Post],
-        synchronize: configService.get('NODE_ENV') !== 'production',
+        // considering the demo nature of this implementation, I'm relying on typeORM sync engine instead of managing the data with database migrations
+        synchronize: true,
         logging: configService.get('NODE_ENV') === 'development',
       }),
     }),
