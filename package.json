@@ -1,0 +1,13 @@
+{
+  "name": "x_clone",
+  "version": "1.0.0",
+  "description": "microblogging application that allows a user to have a profile and, on that profile page, display a feed of posts made by that user",
+  "license": "ISC",
+  "author": "Vanderlei Alves da Silva",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
