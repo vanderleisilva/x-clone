@@ -30,7 +30,6 @@ async function seed() {
     const existingUsers = await userRepository.find();
     if (existingUsers.length > 0) {
       console.log('Database already seeded. Skipping seed operation.');
-      await dataSource.destroy();
       return;
     }
 
