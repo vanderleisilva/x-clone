@@ -8,6 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:backend": "npm run start:dev --workspace=@x_clone/backend",
+    "start:frontend": "npm run dev --workspace=@x_clone/frontend"
   }
 }
