@@ -73,6 +73,72 @@ C4Container
     UpdateElementStyle(database, $bgColor="#E8F5E9", $fontColor="#388E3C")
 ```
 
+### Monorepo Organization
+
+The project uses **npm workspaces** for monorepo management, with two main packages:
+
+- `@x_clone/backend`: NestJS REST API server
+- `@x_clone/frontend`: React single-page application
+
+### Data Model
+
+**User Entity**
+
+- `id`: UUID (primary key)
+- `username`: Unique string identifier
+- `avatar`: Optional image URL
+- `createdAt`, `updatedAt`: Timestamps
+
+**Post Entity**
+
+- `id`: UUID (primary key)
+- `content`: Text content
+- `userId`: Foreign key to User
+- `createdAt`, `updatedAt`: Timestamps
+
+**Relationships**
+
+- User has many Posts (one-to-many)
+- Post belongs to one User (many-to-one)
+
+### Backend Architecture
+
+The backend follows a **three-layer architecture** pattern:
+
+**Presentation Layer (Controllers)**
+
+- Handles HTTP requests and responses
+- Route definitions and OpenAPI/Swagger documentation
+- Input validation via DTOs (Data Transfer Objects)
+- Delegates business logic to services
+
+**Business Logic Layer (Services)**
+
+- Contains domain business logic
+- Transaction management
+- Error handling with NestJS exceptions (e.g., `NotFoundException`)
+- Orchestrates data access via repositories
+
+**Data Access Layer (TypeORM Repositories)**
+
+- Database operations abstraction
+- Entity relationship management
+- Query construction and execution
+- Type-safe database interactions
+
+### Frontend Architecture
+
+The frontend follows a **component-based architecture** with clear separation of concerns:
+
+- **Pages**: Route-level components (`ProfilePage`, `PostsPage`) handling top-level views
+- **Components**: Reusable UI components (`Navigation`, `Posts`) with encapsulated logic
+- **API Layer**:
+  - `client.ts`: Centralized API client with typed fetch wrapper
+  - `queries.ts`: React Query hooks for data fetching with caching and invalidation
+- **State Management**: TanStack Query handles server state (cache, refetching, optimistic updates)
+- **Routing**: React Router v7 for declarative routing
+- **Styling**: Tailwind CSS utility-first approach for responsive design
+
 ## Deployment
 
 The deployment is managed by [https://render.com/](https://render.com/) free tier plan and are available respectively:
