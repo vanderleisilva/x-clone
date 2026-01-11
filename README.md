@@ -151,14 +151,14 @@ The deployment is managed by [https://render.com/](https://render.com/) free tie
 ### Prerequisites
 
 - Node.js (v18+)
-- Docker and Docker Compose (optional, for containerized setup)
+- Docker and Docker Compose
 
-### Option 1: Local Development
+### Local Development
 
-1. **Start PostgreSQL** (if not using Docker):
+1. **Start PostgreSQL**:
 
    ```bash
-   docker-compose up postgres -d
+   docker-compose up
    ```
 
 2. **Install dependencies**:
@@ -167,32 +167,35 @@ The deployment is managed by [https://render.com/](https://render.com/) free tie
    npm install
    ```
 
-3. **Start backend** (from project root):
+3. **Define env values**:
+
+   ```bash
+   cp packages/backend/.env.sample packages/backend/.env
+   ```
+
+Then provide your database connection value in the `.env file`
+
+4. **Optional: Seed database**:
+
+   ```bash
+   npm run seed-backend
+   ```
+
+5. **Start backend** (from project root):
 
    ```bash
    npm run start:backend
    ```
 
-4. **Start frontend** (in a new terminal):
+6. **Start frontend** (in a new terminal):
 
    ```bash
    npm run start:frontend
    ```
 
-5. **Optional: Seed database**:
-   ```bash
-   npm run seed-backend
-   ```
-
 **Note**: Backend defaults to `localhost:5432` for PostgreSQL. Frontend defaults to `http://localhost:3000` for the API. Configure via environment variables if needed.
 
-### Option 2: Using Docker Compose
-
-```bash
-docker-compose up
-```
-
-This starts PostgreSQL, backend API (http://localhost:3000), and frontend (http://localhost:5173). API docs available at http://localhost:3000/api.
+This will start PostgreSQL, backend API (http://localhost:3000), and frontend (http://localhost:5173). API docs available at http://localhost:3000/api.
 
 ### Testing
 

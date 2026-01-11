@@ -17,50 +17,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - x_clone_network
-
-  backend:
-    build:
-      context: ./packages/backend
-      dockerfile: Dockerfile
-    container_name: x_clone_backend
-    environment:
-      NODE_ENV: development
-      PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-x_clone}
-    ports:
-      - "${BACKEND_PORT:-3000}:3000"
-    volumes:
-      - ./packages/backend:/app
-      - /app/node_modules
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - x_clone_network
-
-  frontend:
-    build:
-      context: ./packages/frontend
-      dockerfile: Dockerfile
-    container_name: x_clone_frontend
-    environment:
-      NODE_ENV: development
-    ports:
-      - "${FRONTEND_PORT:-5173}:5173"
-    volumes:
-      - ./packages/frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-    networks:
-      - x_clone_network
 
 volumes:
   postgres_data:
-
-networks:
-  x_clone_network:
-    driver: bridge
 
