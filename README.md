@@ -20,9 +20,14 @@ The project, to decrease its scope and considering its demo purpose, does not in
 - **Pagination**: proper pagination and virtual scrolling in the frontend;
 - **UX consistency**: extract reusable frontend component, reusable design system tokens and implement theming capabilities;
 - **SSR**: consider server-side-rendering in the frontend application for improved SEO and user experience;
+- **i18n**: add localization support for the frontend application;
 - **Real-time Updates**: WebSocket support for live feed (posts) updates;
 - **Accessibility**: improve ARIA labels and keyboard navigation;
 - **Testing**: expand test coverage;
+- **Developer Experience**:
+  - consider migrating to [NX](https://nx.dev/) for better monorepo management
+  - consider replacing [eslint](https://eslint.org/) for [biomejs](https://biomejs.dev/) for better code linting
+  - consider [lefthook](https://lefthook.dev/) for including git hook in the project
 
 ## Architecture
 
@@ -122,6 +127,14 @@ docker-compose up
 ```
 
 This starts PostgreSQL, backend API (http://localhost:3000), and frontend (http://localhost:5173). API docs available at http://localhost:3000/api.
+
+### Testing
+
+For testing the application you may run:
+
+- `npm run test -w packages/frontend` for testing the frontend application
+- `npm run test -w packages/backend` for testing the backend application
+- `npm run test:coverage` for testing all the application and getting the test coverage
 
 ## Technology Stack
 

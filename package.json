@@ -10,6 +10,7 @@
   "scripts": {
     "start:backend": "npm run start:dev --workspace=@x_clone/backend",
     "start:frontend": "npm run dev --workspace=@x_clone/frontend",
-    "seed-backend": "npm run seed --workspace=@x_clone/backend"
+    "seed-backend": "npm run seed --workspace=@x_clone/backend",
+    "test:coverage": "npm run test:coverage --workspaces --if-present"
   }
 }
