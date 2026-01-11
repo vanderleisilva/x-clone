@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "start:backend": "npm run start:dev --workspace=@x_clone/backend",
-    "start:frontend": "npm run dev --workspace=@x_clone/frontend"
+    "start:frontend": "npm run dev --workspace=@x_clone/frontend",
+    "seed-backend": "npm run seed --workspace=@x_clone/backend"
   }
 }
