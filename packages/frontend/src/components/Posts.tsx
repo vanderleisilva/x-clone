@@ -64,117 +64,180 @@ export default function Posts({ username, readOnly = false }: PostsProps) {
   };
 
   if (userLoading) {
-    return <p>Loading posts...</p>;
+    return (
+      <p role="status" aria-live="polite">
+        Loading posts...
+      </p>
+    );
   }
 
   if (postsLoading) {
-    return <p>Loading posts...</p>;
+    return (
+      <p role="status" aria-live="polite">
+        Loading posts...
+      </p>
+    );
   }
 
   if (postsError) {
     return (
-      <p className="text-red-500">Error loading posts: {postsError.message}</p>
+      <p className="text-red-500" role="alert">
+        Error loading posts: {postsError.message}
+      </p>
     );
   }
 
   return (
-    <div>
+    <section>
       <h2 className="text-2xl font-semibold mb-4">Posts</h2>
 
       {!readOnly && user?.id && (
-        <div className="mb-6 p-4 border border-gray-700 rounded-lg bg-gray-800">
+        <form
+          className="mb-6 p-4 border border-gray-700 rounded-lg bg-gray-800"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleCreatePost();
+          }}
+          aria-label="Create new post"
+        >
+          <label htmlFor="new-post-content" className="sr-only">
+            Post content
+          </label>
           <textarea
+            id="new-post-content"
             value={newPostContent}
             onChange={(e) => setNewPostContent(e.target.value)}
             placeholder="What's happening?"
             maxLength={280}
             className="w-full p-2 bg-gray-900 text-white border border-gray-700 rounded resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
             rows={3}
+            aria-label="Post content"
+            aria-describedby="char-count-new"
           />
           <div className="flex justify-between items-center mt-2">
-            <span className="text-sm text-gray-400">
+            <span
+              id="char-count-new"
+              className="text-sm text-gray-400"
+              aria-live="polite"
+            >
               {newPostContent.length}/280
             </span>
             <button
-              onClick={handleCreatePost}
+              type="submit"
               disabled={!newPostContent.trim() || createPost.isPending}
               className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label={createPost.isPending ? "Posting..." : "Post"}
             >
               {createPost.isPending ? "Posting..." : "Post"}
             </button>
           </div>
-        </div>
+        </form>
       )}
 
-      {posts && posts.length === 0 && <p>No posts yet.</p>}
+      {posts && posts.length === 0 && (
+        <p role="status">No posts yet.</p>
+      )}
       {posts && posts.length > 0 && (
-        <div className="flex flex-col gap-4">
+        <ol className="flex flex-col gap-4" aria-label="Posts list">
           {posts.map((post) => (
-            <div
-              key={post.id}
-              className="border border-gray-700 rounded-lg p-4 bg-gray-800"
-            >
-              {editingId === post.id && !readOnly ? (
-                <div>
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    maxLength={280}
-                    className="w-full p-2 bg-gray-900 text-white border border-gray-700 rounded resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    rows={3}
-                  />
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-sm text-gray-400">
-                      {editContent.length}/280
-                    </span>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={handleCancelEdit}
-                        className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+            <li key={post.id}>
+              <article
+                className="border border-gray-700 rounded-lg p-4 bg-gray-800"
+                aria-labelledby={`post-${post.id}`}
+              >
+                {editingId === post.id && !readOnly ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleUpdatePost(post.id);
+                    }}
+                    aria-label={`Edit post ${post.id}`}
+                  >
+                    <label htmlFor={`edit-post-${post.id}`} className="sr-only">
+                      Edit post content
+                    </label>
+                    <textarea
+                      id={`edit-post-${post.id}`}
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      maxLength={280}
+                      className="w-full p-2 bg-gray-900 text-white border border-gray-700 rounded resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      rows={3}
+                      aria-label="Edit post content"
+                      aria-describedby={`char-count-edit-${post.id}`}
+                    />
+                    <div className="flex justify-between items-center mt-2">
+                      <span
+                        id={`char-count-edit-${post.id}`}
+                        className="text-sm text-gray-400"
+                        aria-live="polite"
                       >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={() => handleUpdatePost(post.id)}
-                        disabled={!editContent.trim() || updatePost.isPending}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {updatePost.isPending ? "Updating..." : "Save"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <p className="m-0 whitespace-pre-wrap">{post.content}</p>
-                  <div className="flex justify-between items-center mt-2">
-                    <p className="text-sm text-gray-400 m-0">
-                      {new Date(post.createdAt).toLocaleString()}
-                    </p>
-                    {!readOnly && (
-                      <div className="flex gap-2">
+                        {editContent.length}/280
+                      </span>
+                      <div className="flex gap-2" role="group" aria-label="Edit actions">
                         <button
-                          onClick={() => handleStartEdit(post)}
-                          className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600"
+                          type="button"
+                          onClick={handleCancelEdit}
+                          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+                          aria-label="Cancel editing"
                         >
-                          Edit
+                          Cancel
                         </button>
                         <button
-                          onClick={() => handleDeletePost(post.id)}
-                          disabled={deletePost.isPending}
-                          className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          type="submit"
+                          disabled={!editContent.trim() || updatePost.isPending}
+                          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          aria-label={updatePost.isPending ? "Updating..." : "Save changes"}
                         >
-                          {deletePost.isPending ? "Deleting..." : "Delete"}
+                          {updatePost.isPending ? "Updating..." : "Save"}
                         </button>
                       </div>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <p id={`post-${post.id}`} className="m-0 whitespace-pre-wrap">
+                      {post.content}
+                    </p>
+                    <footer className="flex justify-between items-center mt-2">
+                      <time
+                        className="text-sm text-gray-400 m-0"
+                        dateTime={post.createdAt}
+                        aria-label={`Posted on ${new Date(post.createdAt).toLocaleString()}`}
+                      >
+                        {new Date(post.createdAt).toLocaleString()}
+                      </time>
+                      {!readOnly && (
+                        <div
+                          className="flex gap-2"
+                          role="group"
+                          aria-label={`Actions for post ${post.id}`}
+                        >
+                          <button
+                            onClick={() => handleStartEdit(post)}
+                            className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600"
+                            aria-label={`Edit post ${post.id}`}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeletePost(post.id)}
+                            disabled={deletePost.isPending}
+                            className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label={`Delete post ${post.id}`}
+                          >
+                            {deletePost.isPending ? "Deleting..." : "Delete"}
+                          </button>
+                        </div>
+                      )}
+                    </footer>
+                  </>
+                )}
+              </article>
+            </li>
           ))}
-        </div>
+        </ol>
       )}
-    </div>
+    </section>
   );
 }

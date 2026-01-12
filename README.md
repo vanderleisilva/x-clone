@@ -20,9 +20,10 @@ The project, to decrease its scope and considering its demo purpose, does not in
 - **Pagination**: proper pagination and virtual scrolling in the frontend;
 - **UX consistency**: extract reusable frontend component, reusable design system tokens and implement theming capabilities;
 - **SSR**: consider server-side-rendering in the frontend application for improved SEO and user experience;
+- **SEO enhancements**: implement dynamic meta tags, structured data (JSON-LD), Open Graph images, and sitemap generation;
 - **i18n**: add localization support for the frontend application;
 - **Real-time Updates**: WebSocket support for live feed (posts) updates;
-- **Accessibility**: improve ARIA labels and keyboard navigation;
+- **Accessibility**: improve keyboard navigation (semantic HTML and ARIA labels have been implemented);
 - **Testing**: expand test coverage;
 - **Developer Experience**:
   - consider migrating to [NX](https://nx.dev/) for better monorepo management
